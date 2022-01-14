@@ -273,7 +273,7 @@ class PPUtils
     /**
      * Get data type of a property in a given class
      *
-     * @param string $class
+     * @param string|object $class
      * @param string $propertyName
      *
      * @throws RuntimeException
