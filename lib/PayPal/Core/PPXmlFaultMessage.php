@@ -42,12 +42,17 @@ abstract class PPXmlFaultMessage
             if (empty($element) || empty($element['name'])) {
                 continue;
             } elseif (!array_key_exists($property = strtolower($element['name']), $propertiesMap)) {
-                if (!preg_match('~^(.+)[\[\(](\d+)[\]\)]$~', $property, $m)) {
+                if (!preg_match('~^(.+)[\[\(](\d+)[\]\)]$~', $property, $m)
+                    && !preg_match('~^(ns\d+):(\w+)$~', $property, $m)) {
                     continue;
                 }
 
-                $element['name'] = $m[1];
-                $element['num']  = $m[2];
+                if (strpos($m[0], ':') === false) {
+                    $element['name'] = $m[1];
+                    $element['num']  = $m[2];
+                } else {
+                    $element['name'] = $m[2];
+                }
             }
             $element['name'] = $propertiesMap[strtolower($element['name'])];
             if (PPUtils::isPropertyArray($this, $element['name'])) {
